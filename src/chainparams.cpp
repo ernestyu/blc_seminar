@@ -130,14 +130,6 @@ public:
         // release ASAP to avoid it where possible.
         vSeeds.emplace_back("164.132.59.182"); // Luca Ambrosini
         vSeeds.emplace_back("164.132.59.163"); // Luca Ambrosini
-        // vSeeds.emplace_back("dnsseed.bluematt.me");           // Matt Corallo, only supports x9
-        // vSeeds.emplace_back("dnsseed.bitcoin.dashjr.org");    // Luke Dashjr
-        // vSeeds.emplace_back("seed.bitcoinstats.com");         // Christian Decker, supports x1 - xf
-        // vSeeds.emplace_back("seed.bitcoin.jonasschnelli.ch"); // Jonas Schnelli, only supports x1, x5, x9, and xd
-        // vSeeds.emplace_back("seed.btc.petertodd.org");        // Peter Todd, only supports x1, x5, x9, and xd
-        // vSeeds.emplace_back("seed.bitcoin.sprovoost.nl");     // Sjors Provoost
-        // vSeeds.emplace_back("dnsseed.emzy.de");               // Stephan Oeste
-        // vSeeds.emplace_back("seed.bitcoin.wiz.biz");          // Jason Maurice
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 0);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 5);
@@ -147,7 +139,7 @@ public:
 
         bech32_hrp = "bc";
 
-        vFixedSeeds = std::vector<uint8_t>(std::begin(chainparams_seed_main), std::end(chainparams_seed_main));
+        vFixedSeeds = std::vector<uint8_t>();
 
         fDefaultConsistencyChecks = false;
         fRequireStandard = true;
@@ -224,10 +216,8 @@ public:
         vFixedSeeds.clear();
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("testnet-seed.bitcoin.jonasschnelli.ch");
-        vSeeds.emplace_back("seed.tbtc.petertodd.org");
-        vSeeds.emplace_back("seed.testnet.bitcoin.sprovoost.nl");
-        vSeeds.emplace_back("testnet-seed.bluematt.me"); // Just a static list of stable node(s), only supports x9
+        vSeeds.emplace_back("164.132.59.182"); // Luca Ambrosini
+        vSeeds.emplace_back("164.132.59.163"); // Luca Ambrosini
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 196);
@@ -237,7 +227,7 @@ public:
 
         bech32_hrp = "tb";
 
-        vFixedSeeds = std::vector<uint8_t>(std::begin(chainparams_seed_test), std::end(chainparams_seed_test));
+        vFixedSeeds = std::vector<uint8_t>();
 
         fDefaultConsistencyChecks = false;
         fRequireStandard = false;
@@ -269,9 +259,8 @@ public:
         if (!args.IsArgSet("-signetchallenge")) {
             bin = ParseHex(
                     "512103ad5e0edad18cb1f0fc0d28a3d4f1f3e445640337489abb10404f2d1e086be430210359ef5021964fe22d6f8e05b2463c9540ce96883fe3b278760f048f5189f2e6c452ae");
-            vSeeds.emplace_back("178.128.221.177");
-            vSeeds.emplace_back("2a01:7c8:d005:390::5");
-            vSeeds.emplace_back("v7ajjeirttkbnt32wpy3c6w3emwnfr3fkla7hpxcfokr3ysd3kqtzmqd.onion:38333");
+            vSeeds.emplace_back("164.132.59.182"); // Luca Ambrosini
+            vSeeds.emplace_back("164.132.59.163"); // Luca Ambrosini
 
             consensus.nMinimumChainWork = uint256S(
                     "0x00000000000000000000000000000000000000000000000000000019fd16269a");
