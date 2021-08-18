@@ -3585,7 +3585,7 @@ Go to File &gt; Open Wallet to load a wallet.
     </message>
     <message>
         <source>This is a pre-release test build - use at your own risk - do not use for mining or merchant applications</source>
-        <translation>This is a pre-release test build - use at your own risk - do not use for mining or merchant applications</translation>
+        <translation>TEST This is a pre-release test build - use at your own risk - do not use for mining or merchant applications</translation>
     </message>
     <message>
         <source>This is the transaction fee you may discard if change is smaller than dust at this level</source>
