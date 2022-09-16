@@ -1,9 +1,10 @@
-// Copyright (c) 2011-2020 The Bitcoin Core developers
+// Copyright (c) 2011-2021 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <qt/walletframe.h>
 
+#include <fs.h>
 #include <node/ui_interface.h>
 #include <psbt.h>
 #include <qt/guiutil.h>
@@ -11,8 +12,11 @@
 #include <qt/psbtoperationsdialog.h>
 #include <qt/walletmodel.h>
 #include <qt/walletview.h>
+#include <util/system.h>
 
 #include <cassert>
+#include <fstream>
+#include <string>
 
 #include <QApplication>
 #include <QClipboard>
@@ -64,14 +68,13 @@ void WalletFrame::setClientModel(ClientModel *_clientModel)
     }
 }
 
-bool WalletFrame::addWallet(WalletModel* walletModel, WalletView* walletView)
+bool WalletFrame::addView(WalletView* walletView)
 {
-    if (!clientModel || !walletModel) return false;
+    if (!clientModel) return false;
 
-    if (mapWalletViews.count(walletModel) > 0) return false;
+    if (mapWalletViews.count(walletView->getWalletModel()) > 0) return false;
 
     walletView->setClientModel(clientModel);
-    walletView->setWalletModel(walletModel);
     walletView->showOutOfSyncWarning(bOutOfSync);
 
     WalletView* current_wallet_view = currentWalletView();
@@ -82,7 +85,7 @@ bool WalletFrame::addWallet(WalletModel* walletModel, WalletView* walletView)
     }
 
     walletStack->addWidget(walletView);
-    mapWalletViews[walletModel] = walletView;
+    mapWalletViews[walletView->getWalletModel()] = walletView;
 
     return true;
 }
@@ -109,7 +112,8 @@ void WalletFrame::setCurrentWallet(WalletModel* wallet_model)
     walletView->updateGeometry();
 
     walletStack->setCurrentWidget(walletView);
-    walletView->updateEncryptionStatus();
+
+    Q_EMIT currentWalletSet();
 }
 
 void WalletFrame::removeWallet(WalletModel* wallet_model)
@@ -209,7 +213,7 @@ void WalletFrame::gotoLoadPSBT(bool from_clipboard)
             Q_EMIT message(tr("Error"), tr("PSBT file must be smaller than 100 MiB"), CClientUIInterface::MSG_ERROR);
             return;
         }
-        std::ifstream in(filename.toLocal8Bit().data(), std::ios::binary);
+        std::ifstream in{filename.toLocal8Bit().data(), std::ios::binary};
         data = std::string(std::istreambuf_iterator<char>{in}, {});
     }
 
@@ -220,10 +224,9 @@ void WalletFrame::gotoLoadPSBT(bool from_clipboard)
         return;
     }
 
-    PSBTOperationsDialog* dlg = new PSBTOperationsDialog(this, currentWalletModel(), clientModel);
+    auto dlg = new PSBTOperationsDialog(this, currentWalletModel(), clientModel);
     dlg->openWithPSBT(psbtx);
-    dlg->setAttribute(Qt::WA_DeleteOnClose);
-    dlg->exec();
+    GUIUtil::ShowModalDialogAsynchronously(dlg);
 }
 
 void WalletFrame::encryptWallet()

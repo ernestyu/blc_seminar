@@ -1,5 +1,5 @@
 // Copyright (c) 2010 Satoshi Nakamoto
-// Copyright (c) 2009-2020 The Bitcoin Core developers
+// Copyright (c) 2009-2021 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -443,6 +443,35 @@ public:
     void UpdateActivationParametersFromArgs(const ArgsManager& args);
 };
 
+static void MaybeUpdateHeights(const ArgsManager& args, Consensus::Params& consensus)
+{
+    for (const std::string& arg : args.GetArgs("-testactivationheight")) {
+        const auto found{arg.find('@')};
+        if (found == std::string::npos) {
+            throw std::runtime_error(strprintf("Invalid format (%s) for -testactivationheight=name@height.", arg));
+        }
+        const auto name{arg.substr(0, found)};
+        const auto value{arg.substr(found + 1)};
+        int32_t height;
+        if (!ParseInt32(value, &height) || height < 0 || height >= std::numeric_limits<int>::max()) {
+            throw std::runtime_error(strprintf("Invalid height value (%s) for -testactivationheight=name@height.", arg));
+        }
+        if (name == "segwit") {
+            consensus.SegwitHeight = int{height};
+        } else if (name == "bip34") {
+            consensus.BIP34Height = int{height};
+        } else if (name == "dersig") {
+            consensus.BIP66Height = int{height};
+        } else if (name == "cltv") {
+            consensus.BIP65Height = int{height};
+        } else if (name == "csv") {
+            consensus.CSVHeight = int{height};
+        } else {
+            throw std::runtime_error(strprintf("Invalid name (%s) for -testactivationheight=name@height.", arg));
+        }
+    }
+}
+
 void CRegTestParams::UpdateActivationParametersFromArgs(const ArgsManager& args)
 {
     if (args.IsArgSet("-segwitheight")) {
@@ -455,6 +484,7 @@ void CRegTestParams::UpdateActivationParametersFromArgs(const ArgsManager& args)
         }
         consensus.SegwitHeight = static_cast<int>(height);
     }
+    MaybeUpdateHeights(args, consensus);
 
     if (!args.IsArgSet("-vbparams")) return;
 
