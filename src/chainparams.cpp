@@ -474,16 +474,17 @@ static void MaybeUpdateHeights(const ArgsManager& args, Consensus::Params& conse
 
 void CRegTestParams::UpdateActivationParametersFromArgs(const ArgsManager& args)
 {
-    if (args.IsArgSet("-segwitheight")) {
-        int64_t height = args.GetArg("-segwitheight", consensus.SegwitHeight);
-        if (height < -1 || height >= std::numeric_limits<int>::max()) {
-            throw std::runtime_error(strprintf("Activation height %ld for segwit is out of valid range. Use -1 to disable segwit.", height));
-        } else if (height == -1) {
-            LogPrintf("Segwit disabled for testing\n");
-            height = std::numeric_limits<int>::max();
-        }
-        consensus.SegwitHeight = static_cast<int>(height);
-    }
+    // matijapiskorec: commented out!
+    // if (args.IsArgSet("-segwitheight")) {
+    //     int64_t height = args.GetArg("-segwitheight", consensus.SegwitHeight);
+    //     if (height < -1 || height >= std::numeric_limits<int>::max()) {
+    //         throw std::runtime_error(strprintf("Activation height %ld for segwit is out of valid range. Use -1 to disable segwit.", height));
+    //     } else if (height == -1) {
+    //         LogPrintf("Segwit disabled for testing\n");
+    //         height = std::numeric_limits<int>::max();
+    //     }
+    //     consensus.SegwitHeight = static_cast<int>(height);
+    // }
     MaybeUpdateHeights(args, consensus);
 
     if (!args.IsArgSet("-vbparams")) return;
