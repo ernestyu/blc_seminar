@@ -1,0 +1,8 @@
+** BLS Deploy Ordinals on UZHBitcoin
+*** DONE Preparation[%]
+    
+    - [X] deploy and run a UZHBitcoin node
+    - [X] mining UZHBitcoin
+    - [X] check to use python to interactive with rpc
+
+*** IN-PROGRESS Analysis & Planning[%]
