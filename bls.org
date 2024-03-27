@@ -6,3 +6,4 @@
     - [X] check to use python to interactive with rpc
 
 *** IN-PROGRESS Analysis & Planning[%]
+    SCHEDULED:  <2024-03-31 Sun 23:56>
