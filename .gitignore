@@ -1,8 +1,16 @@
-# 忽略所有的 .bat 文件
+# 忽略所有的 .log 和 .bat 文件
+*.log
+
+
+# 忽略所有的脚本批处理文件
 *.bat
+*.sh
 
 # 忽略临时文件
 *~
+
+# ignore other files
+*.org_archive
 
 # 忽略操作系统生成的文件
 .DS_Store
